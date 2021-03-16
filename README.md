@@ -369,11 +369,7 @@ si tienes dudas existenciales con respecto a estas decisiones. No existe una
 * [Linea de comando CLI](https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e)
 
 ## 9. Checklist
-
-### General
-
-* [ ] Puede instalarse via `npm install --global <github-user>/md-links`
-
+  
 ### `README.md`
 
 * [ ] Un board con el backlog para la implementación de la librería.
