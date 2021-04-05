@@ -1,0 +1,2 @@
+Este es un archivo tipo txt.
+Sirve para ejemplificar, sin embargo, no se va a utilizar.
