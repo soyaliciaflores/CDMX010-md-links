@@ -7,7 +7,7 @@ const document = './Files'
 //const document = './Files/README.md'
 //const document = 'prueba2.md'
 
-const readLinks = ()=>{
+const readLinks = (document)=>{
   fs.readFile(document, 'utf8', function(err, data){ 
     if(err)  {
       console.log('Este es un error en readLinks')
@@ -17,7 +17,6 @@ const readLinks = ()=>{
     URLs.forEach(link => readAllLinks(link))
     const linkStaText = URLs.forEach(link => readAllLinks(link))
     console.log(linkStaText)
-    
     })};
 //readLinks()
 
@@ -26,8 +25,8 @@ const directory = pathParse.dir
 
 //console.log(directory)
 
-const mdPaths = (document) =>{
-fs.readdir(document, (err, files) => {
+const mdPaths = (filePath) =>{
+fs.readdir(filePath, (err, files) => {
   if (err)
     console.log(err);
   else {
@@ -36,38 +35,30 @@ fs.readdir(document, (err, files) => {
        return 
       let onlyMds = file
       //console.log(onlyMds)
-      onlyMds = path.join(directory, document, onlyMds)
+      onlyMds = path.join(directory, filePath, onlyMds)
       fs.readFile(onlyMds, 'utf8', function(err, data){
         const regexURL = /\(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}\gi/gm
         const URLs = data.match(regexURL);
         //console.log(URLs)
         const linkStaText = URLs.forEach(link => readAllLinks(link))
-        //  console.log(linkStaText)
-        readAllLinks()
+        //console.log(linkStaText)
       })
     })
   }})
 }
 //mdPaths(document)
 
-
-// function linkValidate(url, stat){
-// url : url;
-// stat : stat
-// }
-
-//Esta funcion es recursiva para saber si es carpeta o archivo 
-const whatItIs = (document) => {
-  //convertir a ruta absoluta el path enviado por el usuario
+//Esta funcion es para saber si es carpeta o archivo 
+const whatItIs = (filePath) => {
   const regExpFiles = /^(.+)\/([^\/]+)$/m;
-  const itsAMDFile = path.extname(document)
+  const itsAMDFile = path.extname(filePath)
   if (document.match(regExpFiles)){
     //console.log('Es una carpeta')
-    mdPaths(document);
+    mdPaths(filePath);
   }
   else if (itsAMDFile === '.md'){
     //console.log('es un archivo md')
-    readLinks();
+    readLinks(filePath);
   }
   else{
     console.log('No es carpeta ni archiv md')
@@ -77,17 +68,19 @@ whatItIs(document)
 
 const readAllLinks = (link) => {
   fetch(link)
-
   .then(res => {
+      currentPath = (__filename)
       const resStatus = (res.statusText);
-      const propietyLinks = {
-        link : link,
-        stat : resStatus    
-      }
-      console.log(propietyLinks)
+      console.log('Url: '.magenta + link.slice(1,40).brightBlue, '  Status: '.magenta + resStatus + '  Path: '.magenta + currentPath.brightYellow
+      )
+      console.log('----------------------------------------'.rainbow)
   })
   .catch(err => {
+    console.log(link)
+
     console.log(err)
   });
 }
 //readAllLinks(link)
+
+console.log(process.argv)
