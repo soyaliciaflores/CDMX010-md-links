@@ -7,10 +7,7 @@ const fetch = require('node-fetch');
 //const document = './Files/README.md'
 const document = 'prueba2.md'
 
-
-
 //Función que imprime la funcion base
-
 const forInLinks = (links) => {
   const regexURL2 = /\[([^[]+)\]\((.*)\)/;
     for(let x in links){
@@ -33,7 +30,7 @@ const mdLinksFile = () =>{
     //console.log(URLs)
     //Funcion para que muestre el resultado base de un solo archivo 
     //validateLinks(URLs)
-    //Funcion para que muestre el resultado con la option validate
+    //Funcion para que muestre el resultado con la option validate 
     validateOneFile(URLs)
   }}); 
   }
@@ -54,7 +51,6 @@ const mdLinksFile = () =>{
             fs.readFile(onlyMds, 'utf8', function(err, data){
               const regexURL = /\[([^[]+)\](\(.*\))/gm;
               const URLs = data.match(regexURL);
-              //const linkStaText = URLs.forEach(link => mdLinksFile(link))
               //Funcion que muestra la funcion base para carpetas
               //forInLinks(URLs)
               //Funcion que muestra la funcion vaidate para carpetas
@@ -62,7 +58,7 @@ const mdLinksFile = () =>{
             })
           })
         }})}
-     //mdLinksFiles(document)
+    // mdLinksFiles(document)
 
   //Esta funcion es para saber si es carpeta o archivo 
   const whatItIs = (filePath) => {
@@ -71,11 +67,9 @@ const mdLinksFile = () =>{
     //Variable donde se almacena si es un archivo con extension md
     const itsAMDFile = path.extname(filePath)
     if (document.match(regExpFiles)){
-      //console.log('Es una carpeta')
       mdLinksFiles(filePath);
     }
     else if (itsAMDFile === '.md'){
-      //console.log('es un archivo md')
       //mdLinksFile(filePath);
     }
     else{
@@ -83,8 +77,9 @@ const mdLinksFile = () =>{
     }
   }
  // whatItIs(document)
-  
-//Funciones para flag validate
+
+
+////////////////////Funciones para flag validate/////////////////////////
 //Funcion para el flag validate para un solo archivo
 
 const validateOneFile = (links) => {
@@ -96,34 +91,10 @@ const validateOneFile = (links) => {
       // console.log('---------------'.rainbow)
       //console.log('link: '.bgYellow + groupData[2].slice(0,30).brightYellow)
       arrLinks.push(groupData[2])  
-      arrLinks.forEach(getValidateLinks)
  }
+ arrLinks.forEach(getValidateLinks)
+
 }
-  
-//Funcion validate para carpetas
-const getLinksAllMDs = (filePath) =>{
-  const pathParse = path.parse(__filename);
-  const directory = pathParse.dir;
-  fs.readdir(filePath, (err, files) => {
-    if (err)
-    console.log(err);
-    else {
-      files.forEach(file => {
-        if (path.extname(file) != ".md")
-          return 
-          let onlyMds = file
-          //console.log(file)
-          onlyMds = path.join(directory, filePath, onlyMds)
-          fs.readFile(onlyMds, 'utf8', function(err, data){
-            const regexURL = /\https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}\gi/gm;
-            const URLs = data.match(regexURL);
-              //const linkStaText = URLs.forEach(link => mdLinksFile(link))
-            URLs.forEach(getValidateLinks)
-            })
-          })
-        }})
-      }
-    //getLinksAllMDs(document)
   
 const getValidateLinks = (links) => {
   fetch(links)
@@ -147,5 +118,4 @@ const getValidateLinks = (links) => {
       console.log(err)
     })
 };
-  
-  
+ ///////////////Funciones para la flag --stats/////////
