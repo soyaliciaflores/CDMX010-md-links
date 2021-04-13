@@ -64,35 +64,27 @@ const validateInLinks = (links) => {
       console.log(err)
         })};
 
+//Funcion para obtener option stats
 const getStats = (links) => {
   fetch(links)
     .then(res => {
       const resStatus = (res.statusText)
       let objLinks = {
-        url : links,
+        url: links,
         status: resStatus
       }
-        console.log(objLinks)
-      //const uniqueArr = new Set(links)
-      //console.log(uniqueArr)
-        // const currentData = res
-        // currentPath = (__filename)
-        // const resStatus = (res.statusText)
-        // console.log(resStatus)
-        // const statusCode = (res.status)
-        //--------imprime la funcion de validate ------
-        // console.log('Url:'.bgYellow + links.slice(0,200).brightYellow);
-        // console.log('Status: '.bgCyan + statusCode);
-        // if(resStatus === 'OK'){
-        //   console.log('Status:'.bgGreen + 'OK'.brightGreen)
-        // }
-        // else{
-        //   console.log('Status:'.bgRed + 'FAIL'.brightRed) 
-        // }
-        // console.log('Path:'.bgBlue + currentPath.brightBlue)
-        // console.log('----------------------------------------'.rainbow)
+      uniques(objLinks)
     })
     .catch(err => {
       console.log(err)
         })};
 
+const uniques = (links)=>{
+  let claves = Object.keys(links);
+  let arrUnique = []
+  for(let i=0; i< claves.length; i++){
+  let clave = claves[0];
+  arrUnique.push(links[clave])
+  console.log(arrUnique)
+}
+}
