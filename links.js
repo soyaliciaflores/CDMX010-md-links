@@ -351,3 +351,52 @@ const forInLinks = (links) => {
   
            
 //////////////////////////////////////
+
+//Funcion para obtener option stats
+const getStats = (links) => {
+  //console.log(links.length)
+  const arrLinks = []
+  const okLinks = 0
+  for(let i = 0 ; i < links.length; i++){
+  fetch(links[i])
+    .then(res => {
+      const status = (res.statusText)
+      if(status[i] == 'OK'){
+        okLinks ++
+      }
+      console.log(okLinks)
+      // let objLinks = {
+      //   url: links,
+      //   status: resStatus
+      // }
+      // var uniques =_.filter(links,function(link) {
+      //   return link.status==='OK';  
+      // });
+      
+    })
+    .catch(err => {
+      console.log(err)
+        })
+      }};
+
+// const uniques = (links)=>{
+//   let claves = Object.values(links);
+//   let arrUnique = []
+//   let arrLinks = []
+//   let counterLinks = 0
+//   for(let i=0; i< claves.length; i++){
+//   //arrLinks.push(claves[i].url)
+//   // let clave = claves[0];
+//   // arrUnique.push(links[clave])
+//   // const newSet = [...new Set()]
+//   // console.log(newSet)
+// }
+// claves.forEach(link =>
+//   arrLinks.push(claves[0])
+// )
+//console.log(claves[0])
+//console.log(arrLinks)
+// console.log(typeof claves);
+// }
+
+

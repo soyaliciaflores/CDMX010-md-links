@@ -2,14 +2,13 @@ const fs = require('fs');
 const colors = require('colors');
 const path = require('path');
 const fetch = require('node-fetch');
-
-const document = './Files'
+const readline = require('readline-sync')
+//const document = './Files'
 //const document = './Files/README.md'
-//const document = 'prueba2.md'
+const document = 'prueba2.md'
 
-// Esta función excluye todos los archivos md, reconoce los links 
-// y los regresa en forma de array
-const findMarkdownFiles = (document) => {
+// Esta función excluye todos los archivos md, reconoce los links y los regresa en forma de array
+const whatItIs = (document) => {
   // convertir a ruta absoluta el path enviado por el usuario
   const absPath = path.isAbsolute(document) ? document : path.resolve(document)
   const itsAMDFile = path.extname(document)
@@ -17,32 +16,47 @@ const findMarkdownFiles = (document) => {
     const filesAndDirs = fs.readdirSync(absPath)
     let mdFiles = []
     filesAndDirs.forEach((fileAndDir) => {
-      const newMdFiles = findMarkdownFiles(path.join(absPath, fileAndDir))
+      const newMdFiles = whatItIs(path.join(absPath, fileAndDir))
       mdFiles = mdFiles.concat(newMdFiles) 
     })
   } else if (itsAMDFile === '.md') {
       fs.readFile(document, 'utf8', function(err, data){
         const regexURL = /https?:\/\/[a-zA-Z\.\/-]+/gm;
         const URLs = data.match(regexURL)
-        //funcion para mdLinks
-        //validateInLinks(URLs)
-        //funcion para flag validate
-        //URLs.forEach(getValidate)
-        //Funcion para flag stats
-        URLs.forEach(getStats)
+        switch (response){
+          case 'mdlinks':
+            console.log(mdLinks(URLs));
+            break;
+          case '--validate':
+            console.log(getValidate(URLs));
+            break;
+          case '--stats':
+            console.log(getStats(URLs));
+            break;
+          case '--stats --validate':
+            console.log(getStatsValidate(URLs));
+            break
+        }    
       });    
   }}
-findMarkdownFiles(document);
+whatItIs(document);
 
-const validateInLinks = (links) => {
+const mdLinks = (links) => {
+  console.log('-------------------------------------------------------------------------'.rainbow)
+   console.log('                    - - M D - L I N K S '.rainbow)
+   console.log('_______________________________________________________________________'.rainbow)
     for(let link in links){
       const currentPath = (__filename)
-      console.log('----------------------------------------------'.rainbow)
       console.log('link: '.bgYellow + links[link].slice(0,25).brightYellow + '  ---  '.rainbow + 'path: '.bgBlue + currentPath.brightBlue) 
- }}
+      console.log('----------------------------------------------'.rainbow)
+    }}
 
  const getValidate = (links) => {
-  fetch(links)
+  console.log('-------------------------------------------------------------------------'.rainbow)
+   console.log('                     - - V A L I D A T E '.rainbow)
+   console.log('_______________________________________________________________________'.rainbow)
+  links.forEach(links =>
+    fetch(links)
     .then(res => {
         const currentData = res
         currentPath = (__filename)
@@ -62,29 +76,41 @@ const validateInLinks = (links) => {
     })
     .catch(err => {
       console.log(err)
-        })};
+      console.log('_____________________________________________________________'.rainbow)
+        }))};
 
 //Funcion para obtener option stats
 const getStats = (links) => {
+  console.log('-------------------------------------------------------------------------'.rainbow)
+   console.log('                     - - S T A T S '.rainbow)
+   console.log('_______________________________________________________________________'.rainbow)
+  console.log('Total '.brightBlue +  links.length)
+  const unique = [...new Set(links)].length
+  console.log('Unique Links '.brightYellow + unique) };
+
+//Función para obtener stats validate
+const getStatsValidate = (links) => {
+  console.log('-------------------------------------------------------------------------'.rainbow)
+  console.log('                  - - S T A T S  - - V A L I D A T E'.rainbow)
+  console.log('_______________________________________________________________________'.rainbow)
+ console.log('Total '.brightBlue +  links.length)
+ const unique = [...new Set(links)].length
+ console.log('Unique Links '.brightYellow + unique)
+ const brockedLinks = []
+  links.forEach(links =>
   fetch(links)
     .then(res => {
-      const resStatus = (res.statusText)
-      let objLinks = {
-        url: links,
-        status: resStatus
-      }
-      uniques(objLinks)
+      const statusCode = (res.status)
+      console.log(statusCode)
     })
     .catch(err => {
       console.log(err)
-        })};
+        }))};
 
-const uniques = (links)=>{
-  let claves = Object.keys(links);
-  let arrUnique = []
-  for(let i=0; i< claves.length; i++){
-  let clave = claves[0];
-  arrUnique.push(links[clave])
-  console.log(arrUnique)
-}
-}
+const route = readline.question('Ingresa la URL:  ')
+console.log('mdlinks '.rainbow + 'para obtener el link y la ruta del archivo.'.brightBlue)
+console.log('--validate '.rainbow + 'para obtener el link, la ruta y su status'.brightYellow)
+console.log('--stats '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightGreen)
+console.log('--stats --validate '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightMagenta)
+
+response = readline.question('¿Qué operación deseas realizar?  '.brightRed);

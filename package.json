@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "dependencies": {
     "colors": "^1.4.0",
-    "node-fetch": "^2.6.1"
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.1",
+    "readline-sync": "^1.4.10"
   }
 }
