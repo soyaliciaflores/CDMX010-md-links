@@ -3,6 +3,7 @@ const colors = require('colors');
 const path = require('path');
 const fetch = require('node-fetch');
 const readline = require('readline-sync')
+const _ = require('lodash');
 
 //const document = './Files'
 //const document = './Files/README.md'
@@ -24,21 +25,21 @@ const whatItIs = (document) => {
       fs.readFile(document, 'utf8', function(err, data){
         const regexURL = /https?:\/\/[a-zA-Z\.\/-]+/gm;
         const URLs = data.match(regexURL)
-        switch (response){
-          case 'mdlinks':
-            console.log(mdLinks(URLs));
-            break;
-          case '--validate':
-            console.log(getValidate(URLs));
-            break;
-          case '--stats':
-            console.log(getStats(URLs));
-            break;
-          case '--stats --validate':
-            console.log(getStatsValidate(URLs));
-            break
-        }   
-        
+        // switch (response){
+        //   case 'mdlinks':
+        //     console.log(mdLinks(URLs));
+        //     break;
+        //   case '--validate':
+        //     console.log(getValidate(URLs));
+        //     break;
+        //   case '--stats':
+        //     console.log(getStats(URLs));
+        //     break;
+        //   case '--stats --validate':
+        //     console.log(getStatsValidate(URLs));
+        //     break
+        // }   
+        getStatsValidate(URLs)
       });    
   }}
 whatItIs(document);
@@ -102,9 +103,11 @@ const getStatsValidate = (links) => {
  
  validateStatusLink(links)
  .then(result => {
-  console.log(result)
- })
-};
+   let brockenLinks =_.filter(result,function(res) {
+    return res.status != 200;
+});
+console.log('brocken links: '.brightGreen + brockenLinks.length);
+})};
  
 const validateStatusLink = (arrLinks) => {
   const promises = arrLinks.map(link => { // se genera un array de promesas
@@ -114,26 +117,20 @@ const validateStatusLink = (arrLinks) => {
             return {
               status: response.status,
             };
-        } else{
-            return {
-              status: response.status,
-            }
-        }
-      })
+        }})
       .catch((err) => {
         return {
           status: 404
         }
       });
   });
- 
   return Promise.all(promises) //se resuelven todas las promesas
 };
 
-const route = readline.question('Ingresa la URL:  ')
-console.log('mdlinks '.rainbow + 'para obtener el link y la ruta del archivo.'.brightBlue)
-console.log('--validate '.rainbow + 'para obtener el link, la ruta y su status'.brightYellow)
-console.log('--stats '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightGreen)
-console.log('--stats --validate '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightMagenta)
+// const route = readline.question('Ingresa la URL:  ')
+// console.log('mdlinks '.rainbow + 'para obtener el link y la ruta del archivo.'.brightBlue)
+// console.log('--validate '.rainbow + 'para obtener el link, la ruta y su status'.brightYellow)
+// console.log('--stats '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightGreen)
+// console.log('--stats --validate '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightMagenta)
 
-response = readline.question('¿Qué operación deseas realizar?  '.brightRed);
+// response = readline.question('¿Qué operación deseas realizar?  '.brightRed);
