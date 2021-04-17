@@ -3,6 +3,7 @@ const colors = require('colors');
 const path = require('path');
 const fetch = require('node-fetch');
 const readline = require('readline-sync')
+
 //const document = './Files'
 //const document = './Files/README.md'
 const document = 'prueba2.md'
@@ -36,7 +37,8 @@ const whatItIs = (document) => {
           case '--stats --validate':
             console.log(getStatsValidate(URLs));
             break
-        }    
+        }   
+        
       });    
   }}
 whatItIs(document);
@@ -88,6 +90,7 @@ const getStats = (links) => {
   const unique = [...new Set(links)].length
   console.log('Unique Links '.brightYellow + unique) };
 
+
 //Función para obtener stats validate
 const getStatsValidate = (links) => {
   console.log('-------------------------------------------------------------------------'.rainbow)
@@ -96,16 +99,36 @@ const getStatsValidate = (links) => {
  console.log('Total '.brightBlue +  links.length)
  const unique = [...new Set(links)].length
  console.log('Unique Links '.brightYellow + unique)
- const brockedLinks = []
-  links.forEach(links =>
-  fetch(links)
-    .then(res => {
-      const statusCode = (res.status)
-      console.log(statusCode)
-    })
-    .catch(err => {
-      console.log(err)
-        }))};
+ 
+ validateStatusLink(links)
+ .then(result => {
+  console.log(result)
+ })
+};
+ 
+const validateStatusLink = (arrLinks) => {
+  const promises = arrLinks.map(link => { // se genera un array de promesas
+    return fetch(link)
+      .then((response) => {
+        if(response.status){
+            return {
+              status: response.status,
+            };
+        } else{
+            return {
+              status: response.status,
+            }
+        }
+      })
+      .catch((err) => {
+        return {
+          status: 404
+        }
+      });
+  });
+ 
+  return Promise.all(promises) //se resuelven todas las promesas
+};
 
 const route = readline.question('Ingresa la URL:  ')
 console.log('mdlinks '.rainbow + 'para obtener el link y la ruta del archivo.'.brightBlue)
