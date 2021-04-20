@@ -9,6 +9,8 @@ const _ = require('lodash');
 //const document = './Files/README.md'
 const document = 'prueba2.md'
 
+var myArgs = process.argv.slice(2);
+
 // Esta función excluye todos los archivos md, reconoce los links y los regresa en forma de array
 const whatItIs = (document) => {
   // convertir a ruta absoluta el path enviado por el usuario
@@ -25,24 +27,31 @@ const whatItIs = (document) => {
       fs.readFile(document, 'utf8', function(err, data){
         const regexURL = /https?:\/\/[a-zA-Z\.\/-]+/gm;
         const URLs = data.match(regexURL)
-        // switch (response){
-        //   case 'mdlinks':
-        //     console.log(mdLinks(URLs));
-        //     break;
-        //   case '--validate':
-        //     console.log(getValidate(URLs));
-        //     break;
-        //   case '--stats':
-        //     console.log(getStats(URLs));
-        //     break;
-        //   case '--stats --validate':
-        //     console.log(getStatsValidate(URLs));
-        //     break
-        // }   
-        getStatsValidate(URLs)
+      switchURLs(URLs)
       });    
   }}
 whatItIs(document);
+
+ const switchURLs = (URLs) =>{
+  switch (myArgs[0]) {
+          case 'mdlinks':
+            console.log(mdLinks(URLs));
+            break;
+          case '--validate':
+            console.log(getValidate(URLs));
+            break;
+          case '--stats':
+            console.log(getStats(URLs));
+            break;
+          case '--stats --validate':
+            console.log(getStatsValidate(URLs));
+            break
+            default:
+          console.log('-----------------------------------------------'.red)
+          console.log('Sorry, that is not something I know how to do.'.red);
+          console.log('-----------------------------------------------'.red)
+    }
+ }
 
 const mdLinks = (links) => {
   console.log('-------------------------------------------------------------------------'.rainbow)
@@ -52,7 +61,7 @@ const mdLinks = (links) => {
       const currentPath = (__filename)
       console.log('link: '.bgYellow + links[link].slice(0,25).brightYellow + '  ---  '.rainbow + 'path: '.bgBlue + currentPath.brightBlue) 
       console.log('----------------------------------------------'.rainbow)
-    }}
+}}
 
  const getValidate = (links) => {
   console.log('-------------------------------------------------------------------------'.rainbow)
@@ -81,6 +90,7 @@ const mdLinks = (links) => {
       console.log(err)
       console.log('_____________________________________________________________'.rainbow)
         }))};
+       
 
 //Funcion para obtener option stats
 const getStats = (links) => {
@@ -101,7 +111,7 @@ const getStatsValidate = (links) => {
  const unique = [...new Set(links)].length
  console.log('Unique Links '.brightYellow + unique)
  
- validateStatusLink(links)
+validateStatusLink(links)
  .then(result => {
    let brockenLinks =_.filter(result,function(res) {
     return res.status != 200;
@@ -127,10 +137,5 @@ const validateStatusLink = (arrLinks) => {
   return Promise.all(promises) //se resuelven todas las promesas
 };
 
-// const route = readline.question('Ingresa la URL:  ')
-// console.log('mdlinks '.rainbow + 'para obtener el link y la ruta del archivo.'.brightBlue)
-// console.log('--validate '.rainbow + 'para obtener el link, la ruta y su status'.brightYellow)
-// console.log('--stats '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightGreen)
-// console.log('--stats --validate '.rainbow + 'para obtener una estadística del total de links y cuántos links únicos hay'.brightMagenta)
+exports.module = {validateStatusLink}
 
-// response = readline.question('¿Qué operación deseas realizar?  '.brightRed);
