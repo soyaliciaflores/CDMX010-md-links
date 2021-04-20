@@ -6,10 +6,11 @@ const readline = require('readline-sync')
 const _ = require('lodash');
 
 //const document = './Files'
-//const document = './Files/README.md'
-const document = 'prueba2.md'
+//const document = 'prueba2.md'
 
 var myArgs = process.argv.slice(2);
+const document = myArgs[0]
+//console.log(myArgs)
 
 // Esta función excluye todos los archivos md, reconoce los links y los regresa en forma de array
 const whatItIs = (document) => {
@@ -33,25 +34,26 @@ const whatItIs = (document) => {
 whatItIs(document);
 
  const switchURLs = (URLs) =>{
-  switch (myArgs[0]) {
+   if(myArgs.includes('-stats' && '-validate')){
+getStatsValidate(URLs);
+    }else{
+  switch (myArgs[1]) {
           case 'mdlinks':
             console.log(mdLinks(URLs));
             break;
-          case '--validate':
+          case '--validate' || '-v':
             console.log(getValidate(URLs));
             break;
-          case '--stats':
+          case '--stats' || '-s':
             console.log(getStats(URLs));
             break;
-          case '--stats --validate':
-            console.log(getStatsValidate(URLs));
-            break
             default:
-          console.log('-----------------------------------------------'.red)
+          console.log('-------------------------------------------------------------------------'.rainbow);
           console.log('Sorry, that is not something I know how to do.'.red);
-          console.log('-----------------------------------------------'.red)
+          console.log('Commands accepted are mdlinks, --validate, --stats or --stats --validate'.blue);
+          console.log('-------------------------------------------------------------------------'.rainbow);
     }
- }
+ }}
 
 const mdLinks = (links) => {
   console.log('-------------------------------------------------------------------------'.rainbow)
@@ -91,7 +93,6 @@ const mdLinks = (links) => {
       console.log('_____________________________________________________________'.rainbow)
         }))};
        
-
 //Funcion para obtener option stats
 const getStats = (links) => {
   console.log('-------------------------------------------------------------------------'.rainbow)
@@ -138,4 +139,3 @@ const validateStatusLink = (arrLinks) => {
 };
 
 exports.module = {validateStatusLink}
-
