@@ -27,7 +27,7 @@ sistema archivos, con el entorno (_proceso_, _env_, _stdin/stdout/stderr_), ...
 El objetivo de esta librería es crear una herramienta que facilite a las personas a encontrar los links que hay dentro de un texto plano y verificar el status de estos, es decir, la librería verifica si los links estan rotos o son links funcionales y hace diferentes reportes con la información resumida.
 
 
-##Modo de uso
+## Modo de uso
 
 ![](https://github.com/soyaliciaflores/CDMX010-md-links/blob/getLinks/assets/mdlinks.gif?raw=true)
 
