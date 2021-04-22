@@ -28,6 +28,7 @@ El objetivo de esta librería es crear una herramienta que facilite a las person
 
 
 ##Modo de uso
+
 ![](https://github.com/soyaliciaflores/CDMX010-md-links/blob/getLinks/assets/mdlinks.gif?raw=true)
 
 La manera en que debe usarse es tecleando en la terminal primero el nombre del archivo o carpeta a analizar y despues alguno de los siguientes comandos:
