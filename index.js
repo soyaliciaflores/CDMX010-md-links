@@ -138,4 +138,4 @@ const validateStatusLink = (arrLinks) => {
   return Promise.all(promises) //se resuelven todas las promesas
 };
 
-exports.module = {validateStatusLink}
+exports.module = {validateStatusLink, getValidate, getStats, whatItIs, switchURLs}
